@@ -1,0 +1,26 @@
+Created on Tue Auguest 24 2021
+@author: Quinton Dowling
+
+INTRODUCTION
+This script is for modeling the impact of single and pairwise point mutations on the energetics of trimeric protein complexes with C3 symmetry
+
+METHOD
+Step 1: Scaffold prep using rosetta_relax
+
+Step 2: Distance calculations.
+
+Once the scaffolds are appropriately prepared, the next step is to calculate distances between residues in the interface. Create a tasks list for rosetta design for all residues that have a contact distance less than 8 Angstroms.
+
+Step 3: Enumerate mutations
+
+Create a task list with the following structure
+
+bash enumerative_interface.sh resi1 resn1 resi2 resn2
+
+eg.
+bash enumerative_interface.sh 118 Y 91 I
+
+Step 4: Run enumerative design
+
+bash tasks
+

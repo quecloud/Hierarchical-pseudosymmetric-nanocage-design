@@ -1,0 +1,113 @@
+-sym_gen_depth    4				# expanded subunits modeled during docking
+
+-mh:score:max_cb_dis 9
+
+-max_out_of_plane_angle 25		# maximum angle between to the two components
+-min_porosity 0.0				# estimates 'pore' size on surface by projecting to a sphere
+
+-mute all
+-tcdock:topx                 25     # output top X hits               default: 10
+-tcdock:dump_pdb_primary_sub 0
+-tcdock:dump_pdb             1
+-tcdock:dump_gz           true
+#-tcdock:reverse true				# model 'reverse' docks to get the backside of subunits. default set to true
+
+-tcdock:io_cluster_level     1		# sampling clustering levels
+-tcdock:cluster_centers_only 1
+
+-tcdock:min_score_filter 1.0
+
+-mh:dump:max_per_res 50				# motif output
+-mh:dump:max_rms    0.25			# motif output
+
+-mh:score:anti_polar_weight  0.0	# motif weights - polar interactions on backbone. very powerful thus set low.
+-mh:score:strand_pair_weight 1.0	# motif weights
+
+-tcdock::fast_stage_one false
+-tcdock:nsamp1 2000					# number samples. determines resolution of docking change
+
+#-tcdock:clash_atoms     HEAVY
+-tcdock:clash_atoms     BB			# determines what is considered clashing (backbone)
+
+-database /work/sheffler/rosetta/scheme/database
+#-unmute symdock_enum
+
+#-sicdock:weights:splice_dist2 100.0		# termini connecting flags
+#-sicdock:weights:splice 0.5
+#-sicdock:splice:ends false
+
+-tcdock:intra            0.0     # weight for intra contacts       default: 1.0
+-tcdock:intra1           0.0     # weight for comp1 intra contacts default: 1.0
+-tcdock:intra2           0.0     # weight for conp2 intra contacts default: 1.0
+-tcdock:termini_trim      0      # trim up to X for termini score  default: 0
+
+-tcdock:peak_grid_size    0      # peak detect grid size (2*N+1)   default: 24
+-tcdock:peak_grid_smooth  0          # peak detect grid smooth (0+)    default: 1
+
+-tcdock:max_linker_len 0		# loop building
+-lh:db_path NONE
+
+-sicdock:clash_dis        3.5     # max acceptable clash dis        default: 3.5
+-sicdock:contact_dis      12      # max acceptable contact dis      default: 12
+
+-chemical:exclude_patches common
+
+#tcdock:dump_peak_grids  <none>  # dump specific grids grids       default: <none>
+
+#-mh:score:min_contact_pairs 0			
+#-mh:score:max_contact_pairs 9e9
+#-mh:score:noloops false			# allows/disallows motifs found on loops
+
+-mh:match:ss1 true			# only allow motifs found on same type of secondary structure
+-mh:match:ss2 true
+-mh:match:aa1 false			# amino acid motif preservation
+-mh:match:aa2 false
+
+# ###### BB_BB aa1: one sided bb/bb motifs #####
+-mh:path:motifs      /work/sheffler/data/mh3/xsmax_bb_ss_AILMV_resl0.8_msc0.3/xsmax_bb_ss_AILMV_resl0.8_msc0.3.rpm.bin.gz
+-mh:path:scores_BB_BB /work/sheffler/data/mh3/xsmax_bb_ss_AILMV_resl0.8_msc0.3/xsmax_bb_ss_AILMV_resl0.8_msc0.3
+
+#-mh:path:motifs       /work/sheffler/data/mh3/xsmax_bb_ss_AFILMV_resl0.8_msc0.3/xsmax_bb_ss_AFILMV_resl0.8_msc0.3.rpm.bin.gz
+#-mh:path:scores_BB_BB /work/sheffler/data/mh3/xsmax_bb_ss_AFILMV_resl0.8_msc0.3/xsmax_bb_ss_AFILMV_resl0.8_msc0.3
+#-mh:path:motifs       /work/sheffler/data/mh3/xsmax_bb_ss_HBOND_resl10.8_mbv0.3/xsmax_bb_ss_HBOND_resl10.8_mbv0.3.rpm.bin.gz
+#-mh:path:scores_BB_BB /work/sheffler/data/mh3/xsmax_bb_ss_HBOND_resl10.8_mbv0.3/xsmax_bb_ss_HBOND_resl10.8_mbv0.3
+
+-mh:score:use_log false
+-mh:score:use_ss1 true
+-mh:score:use_ss2 true
+-mh:score:use_aa1 false
+-mh:score:use_aa2 false
+
+##### SC_BB aa1: "hotspot" motifs #####
+#-mh:path:motifs       /work/sheffler/data/mh3/xsmax_scbb_resl0.8_msc0.3/xsmax_scbb_resl0.8_msc0.3.rpm.bin.gz
+#-mh:path:scores_SC_BB /work/sheffler/data/mh3/xsmax_scbb_resl0.8_msc0.3/xsmax_scbb_resl0.8_msc0.3
+
+##### PH_PO: strand pairs #####			# motifs for edge strands
+#-mh:path:scores_PH_PO /work/sheffler/data/mh3/xsmax_pp_ssep10_ms0.5_resl0.8/xsmax_pp_ssep10_ms0.5_resl0.8.xh.bin.gz
+
+
+##### BB_PH/BB_PO bb/sc hbonds #####		# sidechain to backbone motifs
+#-mh:path:motifs       /work/sheffler/data/mh3/xsmax_bbpo_resl0.8_msc0.3/xsmax_bbpo_resl0.8_msc0.3.rpm.bin.gz
+#-mh:path:motifs       /work/sheffler/data/mh3/xsmax_bbph_resl0.8_msc0.3/xsmax_bbph_resl0.8_msc0.3.rpm.bin.gz
+#-mh:path:scores_BB_PO /work/sheffler/data/mh3/xsmax_bbpo_resl0.8_msc0.3/xsmax_bbpo_resl0.8_msc0.3.xh.bin.gz
+#-mh:path:scores_BB_PH /work/sheffler/data/mh3/xsmax_bbph_resl0.8_msc0.3/xsmax_bbph_resl0.8_msc0.3.xh.bin.gz
+
+-mh:gen_reverse_motifs_on_load false
+
+-sicdock:score_cache 0
+-sicdock:slide_cache 0
+
+-detect_disulf false
+-ignore_unrecognized_res
+
+#-tcdock:termini_cutoff       15.0    # give a bonus for termini within this distance
+#-tcdock:termini_cutoff_short  6.0    # bonus is constant below this value... 1-10A termini distance equivalent
+-tcdock:termini_weight        0.0    # higher will weight termini distance higher than contact count
+
+-tcdock::usen1 false
+-tcdock::usec1 false
+
+-sicdock:sieve:log_interval 999999
+
+-tcdock:min_res 0
+-tcdock:max_res 999999

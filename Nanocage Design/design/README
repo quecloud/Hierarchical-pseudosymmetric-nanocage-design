@@ -1,0 +1,7 @@
+Scripts for interface design
+
+Output asymmetric units from docking should be moved to the input/ directory. Design is executed with 
+
+>bash sh/cage_design.sh input/input.pdb
+
+where input.pdb is updated with the name of the docked configuration pdb

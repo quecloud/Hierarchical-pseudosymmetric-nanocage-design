@@ -1,0 +1,6 @@
+Scripts for finding designable docked configurations.
+
+Docking executed with 
+
+bash ./sh/dock.sh I53 C5_I301_asu C3_1wa2_asu
+

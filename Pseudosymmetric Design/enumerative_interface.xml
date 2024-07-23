@@ -1,0 +1,73 @@
+<ROSETTASCRIPTS>
+
+	<SCOREFXNS>
+		<ScoreFunction name="beta_nov16" weights="beta_nov16">
+    		</ScoreFunction>
+                <ScoreFunction name="beta_nov16_fa_rep" weights="beta_nov16" >
+			<Reweight scoretype="fa_rep" weight="0.10" />
+                </ScoreFunction>
+	</SCOREFXNS>
+
+	<RESIDUE_SELECTORS>
+		<Index name="resi1" resnums="%%resi1%%A" />//select the residue to design
+		<Index name="resi2" resnums="%%resi2%%A" />
+		<Or name="resis" selectors="resi1,resi2" />
+		<Neighborhood name="neighbs" selector="resis" distance="10" include_focus_in_subset="0"/>
+		<Or name="packable" selectors="resis,neighbs" />
+		<Not name="all_else" selector="packable" />
+
+	</RESIDUE_SELECTORS>
+
+	<TASKOPERATIONS>
+		<IncludeCurrent name="ic"/>
+		<LimitAromaChi2 name="limitaro"/>
+		<InitializeFromCommandline name="init" /> //for ex1 and ex2
+
+		//Residue selector option
+		<OperateOnResidueSubset name="pack_hood" selector="neighbs"> 
+			<RestrictToRepackingRLT/> //limit 10 A neighborhood around design resis to repacking
+		</OperateOnResidueSubset>
+		<OperateOnResidueSubset name="prevent" selector="all_else" >
+			<PreventRepackingRLT/>
+		</OperateOnResidueSubset>
+		<OperateOnResidueSubset name="mutate_resi1A" selector="resi1" >
+			<RestrictAbsentCanonicalAASRLT aas="%%resn1%%" />
+		</OperateOnResidueSubset>
+
+                <OperateOnResidueSubset name="mutate_resi2A" selector="resi2" >
+                        <RestrictAbsentCanonicalAASRLT aas="%%resn2%%" />
+                </OperateOnResidueSubset>
+
+		<OperateOnResidueSubset name="pack_only" selector="packable">
+			<RestrictToRepackingRLT/>
+		</OperateOnResidueSubset>		
+	</TASKOPERATIONS>
+
+	<MOVERS>
+		<DetectSymmetry name="gen_sym" subunit_tolerance=".6" />
+		<SymPackRotamersMover name="mutate_fa_rep" scorefxn="beta_nov16_fa_rep" task_operations="ic,limitaro,init,prevent,pack_hood,mutate_resi1A,mutate_resi2A"/> 
+		<SymPackRotamersMover name="mutate" scorefxn="beta_nov16" task_operations="ic,limitaro,init,prevent,pack_hood,mutate_resi1A,mutate_resi2A"/>
+
+		<TaskAwareSymMinMover name="min" scorefxn="beta_nov16" bb="1" chi="1" rb="1" task_operations="ic,limitaro,init,prevent,pack_only" />
+
+    		<SavePoseMover name="native" restore_pose="0" reference_name="nativePose" />
+	</MOVERS>
+
+	<FILTERS>
+		<Rmsd name="rmsd" symmetry="1" superimpose="1" confidence="1" threshold="100000" reference_name="nativePose" />
+		<Ddg name="ddG" translate_by="1000" scorefxn="beta_nov16" task_operations="ic,limitaro,init,prevent,pack_only" repack="1" repeats="3" threshold="100000000000000000000000" relax_mover="min" repack_bound="1" relax_bound="1" confidence="1"/>
+	</FILTERS>
+
+	<PROTOCOLS>
+		<Add mover_name="gen_sym" />
+		<Add mover_name="min" />
+		<Add mover_name="native" />
+		<Add mover_name="mutate_fa_rep" />
+		<Add mover_name="min" />
+		<Add mover_name="mutate" />
+		<Add mover_name="min" />
+		<Add filter_name="rmsd" />
+		<Add filter_name="ddG" />
+	</PROTOCOLS>
+
+</ROSETTASCRIPTS>
