@@ -4,3 +4,6 @@ Docking executed with
 
 bash ./sh/dock.sh I53 C5_I301_asu C3_1wa2_asu
 
+Expect docking to take approximately 60 minutes on a "standard" PC. 
+Alternatively, you could use https://github.com/willsheffler/rpxdock
+to accomplish a similar task in less time.
